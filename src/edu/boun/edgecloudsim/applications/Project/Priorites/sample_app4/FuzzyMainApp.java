@@ -80,6 +80,7 @@ public class FuzzyMainApp {
 				{
 					String simScenario = SS.getSimulationScenarios()[k];
 					String orchestratorPolicy = SS.getOrchestratorPolicies()[i];
+					if(!"FUZZY_BASED".equals(orchestratorPolicy))continue;
 					Date ScenarioStartDate = Calendar.getInstance().getTime();
 					now = df.format(ScenarioStartDate);
 

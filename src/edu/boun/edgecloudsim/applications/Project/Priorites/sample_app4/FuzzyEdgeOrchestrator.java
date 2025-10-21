@@ -41,6 +41,7 @@ public class FuzzyEdgeOrchestrator extends EdgeOrchestrator {
 
 	public FuzzyEdgeOrchestrator(String _policy, String _simScenario) {
 		super(_policy, _simScenario);
+		this.policy = "FUZZY_BASED";
 	}
 
 	@Override
@@ -69,6 +70,7 @@ public class FuzzyEdgeOrchestrator extends EdgeOrchestrator {
 	@Override
 	public int getDeviceToOffload(Task task) {
 		int result = 0;
+		this.policy = "FUZZY_BASED";
 		
 		//RODO: return proper host ID
 		
@@ -186,57 +188,57 @@ public class FuzzyEdgeOrchestrator extends EdgeOrchestrator {
 					result = bestHostIndex;
 				}
 			}
-			else if(policy.equals("FUZZY_COMPETITOR")){
-				double utilization = edgeUtilization;
-	        	double cpuSpeed = (double)100 - utilization;
-	        	double videoExecution = SimSettings.getInstance().getTaskLookUpTable()[task.getTaskType()][12];
-	        	double dataSize = task.getCloudletFileSize() + task.getCloudletOutputSize();
-	        	double normalizedDataSize = Math.min(MAX_DATA_SIZE, dataSize)/MAX_DATA_SIZE;
-	        	
-		        // Set inputs
-		        fis3.setVariable("wan_bw", wanBW);
-		        fis3.setVariable("cpu_speed", cpuSpeed);
-		        fis3.setVariable("video_execution", videoExecution);
-		        fis3.setVariable("data_size", normalizedDataSize);
-		        
-		        // Evaluate
-		        fis3.evaluate();
-		        
-		        /*
-		        SimLogger.printLine("########################################");
-		        SimLogger.printLine("wan bw: " + wanBW);
-		        SimLogger.printLine("cpu_speed: " + cpuSpeed);
-		        SimLogger.printLine("video_execution: " + videoExecution);
-		        SimLogger.printLine("data_size: " + normalizedDataSize);  
-		        SimLogger.printLine("offload_decision: " + fis2.getVariable("offload_decision").getValue());
-		        SimLogger.printLine("########################################");
-				*/
-		        
-		        if(fis3.getVariable("offload_decision").getValue() > 50)
-					result = SimSettings.CLOUD_DATACENTER_ID;
-				else
-					result = SimSettings.GENERIC_EDGE_DEVICE_ID;
-			}
-			else if(policy.equals("NETWORK_BASED")){
-				if(wanBW > 6)
-					result = SimSettings.CLOUD_DATACENTER_ID;
-				else
-					result = SimSettings.GENERIC_EDGE_DEVICE_ID;
-			}
-			else if(policy.equals("UTILIZATION_BASED")){
-				double utilization = edgeUtilization;
-				if(utilization > 80)
-					result = SimSettings.CLOUD_DATACENTER_ID;
-				else
-					result = SimSettings.GENERIC_EDGE_DEVICE_ID;
-			}
-			else if(policy.equals("HYBRID")){
-				double utilization = edgeUtilization;
-				if(wanBW > 6 && utilization > 80)
-					result = SimSettings.CLOUD_DATACENTER_ID;
-				else
-					result = SimSettings.GENERIC_EDGE_DEVICE_ID;
-			}
+//			else if(policy.equals("FUZZY_COMPETITOR")){
+//				double utilization = edgeUtilization;
+//	        	double cpuSpeed = (double)100 - utilization;
+//	        	double videoExecution = SimSettings.getInstance().getTaskLookUpTable()[task.getTaskType()][12];
+//	        	double dataSize = task.getCloudletFileSize() + task.getCloudletOutputSize();
+//	        	double normalizedDataSize = Math.min(MAX_DATA_SIZE, dataSize)/MAX_DATA_SIZE;
+//
+//		        // Set inputs
+//		        fis3.setVariable("wan_bw", wanBW);
+//		        fis3.setVariable("cpu_speed", cpuSpeed);
+//		        fis3.setVariable("video_execution", videoExecution);
+//		        fis3.setVariable("data_size", normalizedDataSize);
+//
+//		        // Evaluate
+//		        fis3.evaluate();
+//
+//		        /*
+//		        SimLogger.printLine("########################################");
+//		        SimLogger.printLine("wan bw: " + wanBW);
+//		        SimLogger.printLine("cpu_speed: " + cpuSpeed);
+//		        SimLogger.printLine("video_execution: " + videoExecution);
+//		        SimLogger.printLine("data_size: " + normalizedDataSize);
+//		        SimLogger.printLine("offload_decision: " + fis2.getVariable("offload_decision").getValue());
+//		        SimLogger.printLine("########################################");
+//				*/
+//
+//		        if(fis3.getVariable("offload_decision").getValue() > 50)
+//					result = SimSettings.CLOUD_DATACENTER_ID;
+//				else
+//					result = SimSettings.GENERIC_EDGE_DEVICE_ID;
+//			}
+//			else if(policy.equals("NETWORK_BASED")){
+//				if(wanBW > 6)
+//					result = SimSettings.CLOUD_DATACENTER_ID;
+//				else
+//					result = SimSettings.GENERIC_EDGE_DEVICE_ID;
+//			}
+//			else if(policy.equals("UTILIZATION_BASED")){
+//				double utilization = edgeUtilization;
+//				if(utilization > 80)
+//					result = SimSettings.CLOUD_DATACENTER_ID;
+//				else
+//					result = SimSettings.GENERIC_EDGE_DEVICE_ID;
+//			}
+//			else if(policy.equals("HYBRID")){
+//				double utilization = edgeUtilization;
+//				if(wanBW > 6 && utilization > 80)
+//					result = SimSettings.CLOUD_DATACENTER_ID;
+//				else
+//					result = SimSettings.GENERIC_EDGE_DEVICE_ID;
+//			}
 			else {
 				SimLogger.printLine("Unknown edge orchestrator policy! Terminating simulation...");
 				System.exit(0);
